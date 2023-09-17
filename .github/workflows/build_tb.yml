@@ -43,7 +43,7 @@ jobs:
               make rom_sim
   Upload_Sim_Artifact:
     runs-on: vivado-2023
-    needs: [Build-SIM_memblock]
+    needs: [Build-SIM_memblock, Build-SIM_ROM]
     steps:
       - name: Upload Artifact 
         uses: actions/upload-artifact@v2
