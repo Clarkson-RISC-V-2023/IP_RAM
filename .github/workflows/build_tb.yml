@@ -32,7 +32,15 @@ jobs:
         run:  |
               cd IP_RAM 
               make bmem_sim
-  
+  Build-SIM_ROM:
+    runs-on: vivado-2023
+    needs: Clone_Repo
+    steps:
+      - name: ROM_sanity_check
+        shell: bash
+        run:  |
+              cd IP_RAM 
+              make rom_sim
   Upload_Sim_Artifact:
     runs-on: vivado-2023
     needs: [Build-SIM_memblock]
