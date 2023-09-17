@@ -1,0 +1,49 @@
+name: Sanity test on memory IPs
+
+on: 
+  push: 
+    branches: 
+      - main 
+  pull_request:
+
+jobs:
+  Clone_Repo:
+    runs-on: vivado-2023
+    steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      - name: Recursive pull 
+        shell: bash
+        run:  |
+              rm -rf * 
+              git clone --recurse-submodules git@github.com:Clarkson-RISC-V-2023/IP_RAM.git
+              cd IP_RAM
+              git checkout ${{ steps.extract_branch.outputs.branch }}
+              # git submodule update --init
+              tree
+  Build-SIM_memblock:
+    runs-on: vivado-2023
+    needs: Clone_Repo
+    steps:
+      - name: memblock_sanity_check
+        shell: bash
+        run:  |
+              cd IP_RAM 
+              make bmem_sim
+  
+  Upload_Sim_Artifact:
+    runs-on: vivado-2023
+    needs: [Build-SIM_memblock]
+    steps:
+      - name: Upload Artifact 
+        uses: actions/upload-artifact@v2
+        with:
+              name: "PR_RTL_build"
+              path: |
+                ./IP_RAM/out/**
+              if-no-files-found: error
+      - name: Clean
+        shell: bash
+        run: rm -rf IP_RAM
