@@ -1,4 +1,4 @@
-.PHONY: all bmem_sim
+.PHONY: all bmem_sim rom_sim
 
 rom_sim: init rom end
 bmem_sim: init bmem end 
@@ -11,9 +11,9 @@ end:
 	tree
 
 bmem:
-	mkdir -p out/bmem/iverilog/
+	# mkdir -p out/bmem/iverilog/
 	# iverilog disabled for this process
-	# mkdir -p out/bmem/xilinx/
+	mkdir -p out/bmem/xilinx/ || true
 
 	xvlog --sv -d MEM_INIT_PATH=\"./verif/init_mem/memblock_tb_init.hex\" verif/tb_memblock.sv rtl/memblock.sv
 	xelab tb_memblock -debug typical
@@ -27,11 +27,11 @@ bmem:
 	# mv memblock_tb.vcd out/bmem/iverilog/
 
 rom:
-	mkdir -p out/rom/iverilog/
+	# mkdir -p out/rom/iverilog/ 
 	# iverilog disabled for this process
-	# mkdir -p out/rom/xilinx/
+	mkdir -p out/rom/xilinx/ || true
 
-	xvlog --sv -d MEM_INIT_PATH=\"./verif/init_mem/romtb_init.hex\" verif/tb_rom.sv rtl/rom.sv
+	xvlog --sv -d ROM_INIT_PATH=\"./verif/init_mem/rom_tb_init.hex\" verif/tb_rom.sv rtl/rom.sv rtl/memblock.sv
 	xelab tb_rom -debug typical
 	xsim tb_rom -R
 	
