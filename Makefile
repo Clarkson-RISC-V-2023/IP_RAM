@@ -26,6 +26,22 @@ bmem:
 	# vvp out/bmem/iverilog/bmem_sim
 	# mv memblock_tb.vcd out/bmem/iverilog/
 
+rom:
+	mkdir -p out/rom/iverilog/
+	# iverilog disabled for this process
+	# mkdir -p out/rom/xilinx/
+
+	xvlog --sv -d MEM_INIT_PATH=\"./verif/init_mem/romtb_init.hex\" verif/tb_rom.sv rtl/rom.sv
+	xelab tb_rom -debug typical
+	xsim tb_rom -R
+	
+	mv xsim.dir out/rom/xilinx
+	mv *.wdb *.vcd out/rom/xilinx
+
+	# iverilog -g2005-sv -D MEM_INIT_PATH=\"./verif/init_mem/memblock_tb_init.hex\" -o out/rom/iverilog/rom_sim -s tb_memblock verif/tb_memblock.sv rtl/memblock.sv
+	# vvp out/rom/iverilog/rom_sim
+	# mv memblock_tb.vcd out/rom/iverilog/
+
 clean:
 	rm -rf out/ xsim.dir || true
 	rm *.pb *.log *.jou *.wdb *.vcd || true

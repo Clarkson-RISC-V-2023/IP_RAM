@@ -28,7 +28,6 @@ module tb_memblock #(
     );
 
     initial begin
-        $display("%s", MEM_INIT_PATH);
         $readmemh(MEM_INIT_PATH, dut_bmem.bmem);
         $dumpfile("memblock_tb.vcd");
         $dumpvars(0, tb_memblock);

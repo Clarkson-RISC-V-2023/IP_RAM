@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/workspace/esola-thomas/IP_RAM/verif/tb_rom.sv" into library work
+WARNING: [VRFC 10-3381] ignoring re-definition of command line macro 'MEM_INIT_PATH' [/workspace/esola-thomas/IP_RAM/verif/tb_rom.sv:2]
+INFO: [VRFC 10-311] analyzing module tb_rom
+ERROR: [VRFC 10-4982] syntax error near '32' [/workspace/esola-thomas/IP_RAM/verif/tb_rom.sv:5]
