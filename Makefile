@@ -1,4 +1,4 @@
-.PHONY: all bmem_sim rom_sim 
+.PHONY: all bmem_sim rom_sim ram_sim
 
 all: init bmem rom ram end 
 rom_sim: init rom end
