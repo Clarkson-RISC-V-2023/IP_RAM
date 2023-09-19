@@ -41,9 +41,18 @@ jobs:
         run:  |
               cd IP_RAM 
               make rom_sim
+  Build-SIM_RAM:
+    runs-on: vivado-2023
+    needs: Clone_Repo
+    steps:
+      - name: ROM_sanity_check
+        shell: bash
+        run:  |
+              cd IP_RAM 
+              make ram_sim
   Upload_Sim_Artifact:
     runs-on: vivado-2023
-    needs: [Build-SIM_memblock, Build-SIM_ROM]
+    needs: [Build-SIM_memblock, Build-SIM_ROM, Build-SIM_RAM]
     steps:
       - name: Upload Artifact 
         uses: actions/upload-artifact@v2
