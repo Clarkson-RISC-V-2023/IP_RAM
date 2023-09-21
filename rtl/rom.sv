@@ -17,7 +17,7 @@ module rom #(
         .clk(clk),
         .wr_en_i(1'b0), // Write enable is always low for ROM
         .addr_i(addr_i >> 2), // Right shift address by 2 to increment by 4
-        .wr_data_i('0), // Write data is don't care for ROM
+        .wr_data_i({DEPTH{1'b0}}), // Write data is don't care for ROM
         .rd_data_o(rom_o)
     );
 endmodule
