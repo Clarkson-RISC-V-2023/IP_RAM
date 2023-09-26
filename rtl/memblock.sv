@@ -12,19 +12,22 @@ module memblock #(
 );
     reg [DATA_WIDTH-1:0] bmem [DEPTH-1:0];
 
+    integer i;
     initial begin
         if(MEM_INIT_PATH != "") begin
             $readmemb(MEM_INIT_PATH, bmem);
+        end else begin
+            for(i = 0;i < DEPTH;i = i + 1) bmem[i] = '0;
         end
     end
     
     always_ff @(posedge clk) begin
-        if(wr_en_i)
+        if(wr_en_i) begin
             bmem[addr_i] <= wr_data_i;
+            rd_data_o <= wr_data_i;
+        end else begin
+            rd_data_o <= bmem[addr_i];
+        end
     end
 
-    always_ff @(negedge clk) begin
-        if(!wr_en_i)
-            rd_data_o <= bmem[addr_i];
-    end
 endmodule

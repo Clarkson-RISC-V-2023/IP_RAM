@@ -22,7 +22,7 @@ module ram #(
     generate
         for (bank_num = 0; bank_num < NUM_OF_MEM_BLOCKS;bank_num=bank_num+1) begin : mem_block_loop
             localparam [$clog2(NUM_OF_MEM_BLOCKS)-1:0] bank_num_bin = bank_num;
-            assign bank_addr[bank_num] =  addr_i+bank_num_bin;
+            assign bank_addr[bank_num] =  addr_i;
             memblock #(
                 .DEPTH(DEPTH),
                 .DATA_WIDTH(BANK_WIDTH)
