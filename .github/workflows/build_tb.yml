@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run:  |
               cd IP_RAM 
-              make bmem_sim
+              make bmem OUT_DIR=./out/bmem 
   Build-SIM_ROM:
     runs-on: vivado-2023
     needs: Clone_Repo
@@ -40,7 +40,7 @@ jobs:
         shell: bash
         run:  |
               cd IP_RAM 
-              make rom_sim
+              make rom OUT_DIR=./out/rom
   Build-SIM_RAM:
     runs-on: vivado-2023
     needs: Clone_Repo
@@ -49,7 +49,7 @@ jobs:
         shell: bash
         run:  |
               cd IP_RAM 
-              make ram_sim
+              make ram OUT_DIR=./out/ram
   Upload_Sim_Artifact:
     runs-on: vivado-2023
     needs: [Build-SIM_memblock, Build-SIM_ROM, Build-SIM_RAM]
