@@ -5,7 +5,7 @@ import uvm_pkg::*;
 
 import ram_params::*;
 
-class ram_packet_items extends uvm_sequence_item;
+class ram_packet_item extends uvm_sequence_item;
     rand bit [$clog2(ADDRESS_SPACE)-1:0]    addr;
     rand bit [DATA_WIDTH-1:0]               wdata;
     rand bit [NUM_OF_MEM_BLOCKS-1:0]        mem_block_en;
@@ -15,7 +15,7 @@ class ram_packet_items extends uvm_sequence_item;
     constraint ram_item_addr { addr inside {[0:DEPTH]}; };
 
     // Use macro to register class with factory
-    `uvm_object_utils_begin(ram_packet_items)
+    `uvm_object_utils_begin(ram_packet_item)
         `uvm_field_int(addr, UVM_DEFAULT)
         `uvm_field_int(wdata, UVM_DEFAULT)
         `uvm_field_int(rdata, UVM_DEFAULT)

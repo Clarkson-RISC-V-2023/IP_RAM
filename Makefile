@@ -15,6 +15,7 @@ build:
 	xvlog $(XVLOG_FLAGS) 
 	xelab $(XELAB_FLAGS)
 	xsim $(XSIM_FLAGS)
+	rm -rf $(OUT_DIR)/*
 	mv xvlog* xelab* xsim** *.wdb *.vcd $(OUT_DIR)
 
 bmem:
@@ -36,4 +37,4 @@ ram:
 	make build IP=uvm_ram OUT_DIR=$(OUT_DIR)/uvm/ram FILE_LIST=$(UVM_FILE_LIST)
 
 clean:
-	rm -rf xvlog* xelab* xsim* *.wdb *.vcd out
+	rm -rf xvlog* xelab* xsim* *.wdb *.log *.vcd out
