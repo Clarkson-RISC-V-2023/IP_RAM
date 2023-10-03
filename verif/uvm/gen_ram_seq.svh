@@ -29,7 +29,16 @@ class gen_ram_seq extends uvm_sequence;
             finish_item(item);
         end 
 
-        read_all_memory();
+        `uvm_info("SEQUENCER", $sformatf("Sending %d 'r' ram_packets to verify data stored", DEPTH), UVM_LOW)
+        
+        // Read all address locations to verify data
+        for (int i = 0; i < DEPTH; i++) begin
+            string seq_read_item = $sformatf("sequencer_reader_item_#%d", i);
+            item = ram_packet_item::type_id::create(seq_read_item);
+            start_item(item);
+            item.randomize() with { addr == i; wr_en_i == 1'b0; };
+            finish_item(item);
+        end
 
         `uvm_info("SEQUENCER", $sformatf("Sending %d random 'w' ram_packets to overwrite data stored", random_write_count), UVM_LOW)
         // Read all address locations to verify data
@@ -43,21 +52,16 @@ class gen_ram_seq extends uvm_sequence;
             finish_item(item);
         end
 
-        read_all_memory();
-
-    endtask
-
-    function void read_all_memory (); 
         `uvm_info("SEQUENCER", $sformatf("Sending %d 'r' ram_packets to verify data stored", DEPTH), UVM_LOW)
         
         // Read all address locations to verify data
         for (int i = 0; i < DEPTH; i++) begin
             string seq_read_item = $sformatf("sequencer_reader_item_#%d", i);
-            reader_item = ram_packet_item::type_id::create(seq_read_item);
-            start_item(reader_item);
-            reader_item.randomize() with { addr == i; wr_en_i == 1'b0; };
-            finish_item(reader_item);
+            item = ram_packet_item::type_id::create(seq_read_item);
+            start_item(item);
+            item.randomize() with { addr == i; wr_en_i == 1'b0; };
+            finish_item(item);
         end
-    endfunction
 
+    endtask
 endclass

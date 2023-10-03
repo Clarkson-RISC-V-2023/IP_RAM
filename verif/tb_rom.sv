@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 `define ROM_INIT_PATH ""
 
 module tb_rom #(

@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 import ram_params::*;
  
 module ram (

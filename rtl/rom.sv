@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module rom #(
     parameter DEPTH = 256, 
     parameter DATA_WIDTH = 32,

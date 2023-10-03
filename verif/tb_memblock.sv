@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 `define MEM_INIT_PATH ""
 
 module tb_memblock #(
