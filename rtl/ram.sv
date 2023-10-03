@@ -1,11 +1,8 @@
 `timescale 1ns/1ps
 
-module ram #(
-    parameter DATA_WIDTH = 32, // Must be multiple of 8 or BANK_WIDTH
-    parameter DEPTH = 1024,
-    parameter NUM_OF_MEM_BLOCKS = 4, // DATA_WIDTH/8 or DATA_WIDTH/BANK_WIDTH
-    parameter ADDRESS_SPACE = 4096 // <= DEPTH * NUM_OF_MEM_BLOCKS
-)(
+import ram_params::*;
+ 
+module ram (
     input wire clk,
     input wire [$clog2(ADDRESS_SPACE)-1:0]addr_i,
     input wire [DATA_WIDTH-1:0] wr_data_i,

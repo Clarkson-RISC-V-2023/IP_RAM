@@ -1,39 +1,39 @@
 .PHONY: all bmem rom ram
 
-OUT_DIR = ./out/
+IP 				= ram
+FILE_LIST 		= ./files.f
+UVM_FILE_LIST	= ./files_uvm.f
+XVLOG_FLAGS 	= -sv -L uvm -f $(FILE_LIST)
+XELAB_FLAGS 	= -top tb_$(IP)
+XSIM_FLAGS 		= -R tb_$(IP)
+OUT_DIR 		= ./out
 
-all: bmem rom ram  
+all: clean bmem rom ram  
+
+build: 
+	mkdir -p $(OUT_DIR)
+	xvlog $(XVLOG_FLAGS) 
+	xelab $(XELAB_FLAGS)
+	xsim $(XSIM_FLAGS)
+	mv xvlog* xelab* xsim** *.wdb *.vcd $(OUT_DIR)
 
 bmem:
-	mkdir -p $(OUT_DIR)
-
-	xvlog --sv -d MEM_INIT_PATH=\"./verif/init_mem/memblock_tb_init.hex\" verif/tb_memblock.sv rtl/memblock.sv
-	xelab tb_memblock -debug typical
-	xsim tb_memblock -R
-	
-	mv xsim.dir $(OUT_DIR)
-	mv xvlog* xelab* xsim* *.wdb *.vcd $(OUT_DIR)
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	# BUILDING tb BMEM:
+	make build IP=memblock OUT_DIR=$(OUT_DIR)/tb/bmem
 
 rom:
-	mkdir -p $(OUT_DIR)
-
-	xvlog --sv -d ROM_INIT_PATH=\"./verif/init_mem/rom_tb_init.hex\" verif/tb_rom.sv rtl/rom.sv rtl/memblock.sv
-	xelab tb_rom -debug typical
-	xsim tb_rom -R
-	
-	mv xsim.dir $(OUT_DIR)
-	mv xvlog* xelab* xsim* *.wdb *.vcd $(OUT_DIR)
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	# BUILDING tb ROM:
+	make build IP=rom OUT_DIR=$(OUT_DIR)/tb/rom
 
 ram:
-	mkdir -p $(OUT_DIR)
-
-	xvlog --sv verif/tb_ram.sv rtl/ram.sv rtl/memblock.sv
-	xelab tb_ram -debug typical
-	xsim tb_ram -R
-	
-	mv xsim.dir $(OUT_DIR)
-	mv xvlog* xelab* xsim* *.wdb *.vcd $(OUT_DIR)
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	# BUILDING tb RAM:
+	make build IP=ram OUT_DIR=$(OUT_DIR)/tb/ram
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	# BUILDING UVM RAM:
+	make build IP=uvm_ram OUT_DIR=$(OUT_DIR)/uvm/ram FILE_LIST=$(UVM_FILE_LIST)
 
 clean:
-	rm -rf $(OUT_DIR) xsim.dir 
-	rm -rf *.pb *.log *.jou *.wdb *.vcd
+	rm -rf xvlog* xelab* xsim* *.wdb *.vcd out

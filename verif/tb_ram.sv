@@ -1,11 +1,7 @@
 `timescale 1ns / 1ps
+import ram_params::*;
 
 module tb_ram;
-    // Parameters
-    parameter DATA_WIDTH = 32;
-    parameter DEPTH = 32;
-    parameter NUM_OF_MEM_BLOCKS = 4;
-
     localparam ADDRESS_SPACE = DEPTH*NUM_OF_MEM_BLOCKS;
 
     // Signals
@@ -17,12 +13,7 @@ module tb_ram;
     wire [DATA_WIDTH-1:0] rd_data_o;
 
     // Instantiate the RAM module
-    ram #(
-        .DATA_WIDTH(DATA_WIDTH),
-        .DEPTH(DEPTH),
-        .NUM_OF_MEM_BLOCKS(NUM_OF_MEM_BLOCKS),
-        .ADDRESS_SPACE(ADDRESS_SPACE)
-    ) u_ram (
+    ram u_ram (
         .clk(clk),
         .addr_i(addr_i),
         .wr_data_i(wr_data_i),
