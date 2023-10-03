@@ -16,7 +16,9 @@ build:
 	xelab $(XELAB_FLAGS)
 	xsim $(XSIM_FLAGS)
 	rm -rf $(OUT_DIR)/*
-	$ mv xvlog* xelab* xsim** *.wdb *.vcd $(OUT_DIR)
+	mv xvlog* xelab* xsim** $(OUT_DIR)
+	mv *.wdb $(OUT_DIR) || true
+	mv *.vcd $(OUT_DIR) || true
 
 bmem:
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
