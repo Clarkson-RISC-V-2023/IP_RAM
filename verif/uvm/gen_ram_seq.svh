@@ -12,6 +12,7 @@ class gen_ram_seq extends uvm_sequence;
         super.new(name);
     endfunction
 
+    rand int random_write_count;
     ram_packet_item item;          // write itme
 
     virtual task body();
@@ -30,9 +31,9 @@ class gen_ram_seq extends uvm_sequence;
 
         read_all_memory();
 
-        `uvm_info("SEQUENCER", $sformatf("Sending %d random 'w' ram_packets to overwrite data stored", DEPTH, DATA_WIDTH), UVM_LOW)
+        `uvm_info("SEQUENCER", $sformatf("Sending %d random 'w' ram_packets to overwrite data stored", random_write_count), UVM_LOW)
         // Read all address locations to verify data
-        for (int i = 0; i < DEPTH; i++) begin
+        for (int i = 0; i < random_write_count; i++) begin
             string seq_item_name = $sformatf("RAM 'w' data packet #%d", i);
 
             item = ram_packet_item::type_id::create(seq_item_name);
@@ -46,7 +47,7 @@ class gen_ram_seq extends uvm_sequence;
 
     endtask
 
-    function void read_all_memory ();
+    function void read_all_memory (); 
         `uvm_info("SEQUENCER", $sformatf("Sending %d 'r' ram_packets to verify data stored", DEPTH), UVM_LOW)
         
         // Read all address locations to verify data
