@@ -25,7 +25,7 @@ class gen_ram_seq extends uvm_sequence;
             item = ram_packet_item::type_id::create(seq_item_name);
 
             start_item(item);
-            item.randomize() with { addr == i; mem_block_en == {NUM_OF_MEM_BLOCKS{1'b1}}; wr_en_i == 1'b1; };
+            item.randomize() with { addr == i; mem_block_en == {NUM_OF_MEM_BLOCKS{1'b1}}; wr_en == 1'b1; };
             finish_item(item);
         end 
 
@@ -36,7 +36,7 @@ class gen_ram_seq extends uvm_sequence;
             string seq_read_item = $sformatf("sequencer_reader_item_#%d", i);
             item = ram_packet_item::type_id::create(seq_read_item);
             start_item(item);
-            item.randomize() with { addr == i; wr_en_i == 1'b0; };
+            item.randomize() with { addr == i; wr_en == 1'b0; };
             finish_item(item);
         end
 
@@ -48,7 +48,7 @@ class gen_ram_seq extends uvm_sequence;
             item = ram_packet_item::type_id::create(seq_item_name);
 
             start_item(item);
-            item.randomize() with { mem_block_en == {NUM_OF_MEM_BLOCKS{1'b1}}; wr_en_i == 1'b1; };
+            item.randomize() with { mem_block_en == {NUM_OF_MEM_BLOCKS{1'b1}}; wr_en == 1'b1; };
             finish_item(item);
         end
 
@@ -59,7 +59,7 @@ class gen_ram_seq extends uvm_sequence;
             string seq_read_item = $sformatf("sequencer_reader_item_#%d", i);
             item = ram_packet_item::type_id::create(seq_read_item);
             start_item(item);
-            item.randomize() with { addr == i; wr_en_i == 1'b0; };
+            item.randomize() with { addr == i; wr_en == 1'b0; };
             finish_item(item);
         end
 
