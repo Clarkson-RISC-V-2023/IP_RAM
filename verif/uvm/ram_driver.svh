@@ -14,13 +14,13 @@ class ram_driver extends uvm_driver #(ram_packet_item);
     virtual function void build_phase (uvm_phase phase);
         super.build_phase(phase);
         if (!uvm_config_db#(virtual ram_if):: get(this, "", "ram_vif", vif))
-            `uvm_fatal("DRIVER", "Could not get hold of vif...")
+            `uvm_fatal(get_type_name(), "Could not get hold of vif...")
     endfunction
 
     virtual task run_phase(uvm_phase phase);
         super.run_phase(phase);
         forever begin
-            `uvm_info("DRIVER", $sformatf("Waiting for sequencer..."), UVM_LOW)
+            `uvm_info(get_type_name(), $sformatf("Waiting for sequencer..."), UVM_LOW)
             seq_item_port.get_next_item(item);
             drive_item(item);
             seq_item_port.item_done();
