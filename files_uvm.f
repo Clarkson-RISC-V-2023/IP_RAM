@@ -5,5 +5,6 @@
 ./verif/uvm/gen_ram_seq.svh
 ./verif/uvm/ram_driver.svh
 ./verif/uvm/ram_scoreboard.svh
+./verif/uvm/ram_monitor.svh
 
 ./verif/tb_uvm_ram.sv
