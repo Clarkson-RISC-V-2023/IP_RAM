@@ -50,9 +50,18 @@ jobs:
         run:  |
               cd IP_RAM 
               make ram OUT_DIR=./out/ram
+  Build-UVM-RAM:
+    runs-on: vivado-2023
+    needs: [Clone_Repo, Build-SIM_RAM]
+    steps:
+      - name: RAM_UVM_sanity_check
+        shell: bash
+        runs: |
+              cd IP_RAM
+              make uvm_ram
   Upload_Sim_Artifact:
     runs-on: vivado-2023
-    needs: [Build-SIM_memblock, Build-SIM_ROM, Build-SIM_RAM]
+    needs: [Build-SIM_memblock, Build-SIM_ROM, Build-SIM_RAM, Build-UVM-RAM]
     steps:
       - name: Upload Artifact 
         uses: actions/upload-artifact@v2

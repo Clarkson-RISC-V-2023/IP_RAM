@@ -1,14 +1,15 @@
-.PHONY: all bmem rom ram
+.PHONY: all bmem rom ram uvm_ram
 
 IP 				= ram
 FILE_LIST 		= ./files.f
 UVM_FILE_LIST	= ./files_uvm.f
-XVLOG_FLAGS 	= -sv -L uvm -f $(FILE_LIST)
+XVLOG_FLAGS 	= -sv -f $(FILE_LIST)
+UVM_XVLOG_FLAGS	= -sv -L uvm -f $(UVM_FILE_LIST)
 XELAB_FLAGS 	= -top tb_$(IP)
 XSIM_FLAGS 		= -R tb_$(IP)
 OUT_DIR 		= ./out
 
-all: clean bmem rom ram  
+all: clean bmem rom ram uvm_ram 
 
 build: 
 	mkdir -p $(OUT_DIR)
@@ -34,9 +35,11 @@ ram:
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	# BUILDING tb RAM:
 	make build IP=ram OUT_DIR=$(OUT_DIR)/tb/ram
+
+uvm_ram:
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	# BUILDING UVM RAM:
-	make build IP=uvm_ram OUT_DIR=$(OUT_DIR)/uvm/ram FILE_LIST=$(UVM_FILE_LIST)
+	make build IP=uvm_ram OUT_DIR=$(OUT_DIR)/uvm/ram  XVLOG_FLAGS="$(UVM_XVLOG_FLAGS)"
 
 clean:
 	rm -rf xvlog* xelab* xsim* *.wdb *.log *.vcd out
