@@ -11,8 +11,8 @@ module tb_memblock #(
     reg clk;
     reg wr_en;
     reg [$clog2(DEPTH)-1:0] addr;
-    reg [DATA_WIDTH-1:0] wr_data;
-    wire [DATA_WIDTH-1:0] rd_data;
+    reg [DATA_WIDTH-1:0] wdata;
+    wire [DATA_WIDTH-1:0] rdata;
 
     memblock #(
         .DEPTH(DEPTH),
@@ -22,8 +22,8 @@ module tb_memblock #(
         .clk(clk),
         .wr_en_i(wr_en),
         .addr_i(addr),
-        .wr_data_i(wr_data),
-        .rd_data_o(rd_data)
+        .wdata_i(wdata),
+        .rdata_o(rdata)
     );
 
     initial begin
@@ -34,7 +34,7 @@ module tb_memblock #(
         // Set read mode and address to 0
         clk = 0;
         wr_en = 0;
-        wr_data = {DATA_WIDTH{1'b1}};
+        wdata = {DATA_WIDTH{1'b1}};
         addr = {$clog2(DEPTH){1'b0}};
         // Read all the preloaded values
         #20 addr = addr + 1'b1;
@@ -55,11 +55,11 @@ module tb_memblock #(
         // Write 4 new values
         wr_en = 1;
         #20 addr = addr + 1'b1;
-        wr_data = {DATA_WIDTH{1'b0}};
+        wdata = {DATA_WIDTH{1'b0}};
         #20 addr = addr + 1'b1;
-        wr_data = wr_data + 1'b1;
+        wdata = wdata + 1'b1;
         #20 addr = addr + 1'b1;
-        wr_data = wr_data + 1'b1;
+        wdata = wdata + 1'b1;
 
         #20 wr_en = 1'b0;
         addr = {$clog2(DEPTH){1'b0}};

@@ -6,19 +6,19 @@ module tb_ram;
     // Signals
     reg clk;
     reg [$clog2(ADDRESS_SPACE)-1:0] addr_i;
-    reg [DATA_WIDTH-1:0] wr_data_i;
+    reg [DATA_WIDTH-1:0] wdata_i;
     reg [NUM_OF_MEM_BLOCKS-1:0] mem_block_en_i;
     reg wr_en_i;
-    wire [DATA_WIDTH-1:0] rd_data_o;
+    wire [DATA_WIDTH-1:0] rdata_o;
 
     // Instantiate the RAM module
     ram u_ram (
         .clk(clk),
         .addr_i(addr_i),
-        .wr_data_i(wr_data_i),
+        .wdata_i(wdata_i),
         .mem_block_en_i(mem_block_en_i),
         .wr_en_i(wr_en_i),
-        .rd_data_o(rd_data_o)
+        .rdata_o(rdata_o)
     );
 
     // Clock generator
@@ -37,7 +37,7 @@ module tb_ram;
         // Write to the RAM
 
         for (addr_i = 0; addr_i < ADDRESS_SPACE; addr_i = addr_i + 4) begin
-            wr_data_i = addr_i;
+            wdata_i = addr_i;
             wr_en_i = 1;
             #10; // Wait for a clock cycle
             wr_en_i = 0;
@@ -50,8 +50,8 @@ module tb_ram;
         // Read from the RAM and check the data
         for (addr_i = 0; addr_i < ADDRESS_SPACE; addr_i = addr_i + 4) begin
             #10; // Wait for a clock cycle
-            if (rd_data_o !== addr_i) begin
-                $display("Data mismatch at address %d: expected %d, got %d", addr_i, addr_i, rd_data_o);
+            if (rdata_o !== addr_i) begin
+                $display("Data mismatch at address %d: expected %d, got %d", addr_i, addr_i, rdata_o);
             end
             if (addr_i == ADDRESS_SPACE-4) begin
                 $display("Test completed");
@@ -62,7 +62,7 @@ module tb_ram;
         // Write to the RAM with offset
 
         for (addr_i = 1; addr_i < ADDRESS_SPACE; addr_i = addr_i + 4) begin
-            wr_data_i = addr_i;
+            wdata_i = addr_i;
             wr_en_i = 1;
             #10; // Wait for a clock cycle
             wr_en_i = 0;
@@ -75,8 +75,8 @@ module tb_ram;
         // Read from the RAM and check the data
         for (addr_i = 1; addr_i < ADDRESS_SPACE; addr_i = addr_i + 4) begin
             #10; // Wait for a clock cycle
-            if (rd_data_o !== addr_i) begin
-                $display("Data mismatch at address %d: expected %d, got %d", addr_i, addr_i, rd_data_o);
+            if (rdata_o !== addr_i) begin
+                $display("Data mismatch at address %d: expected %d, got %d", addr_i, addr_i, rdata_o);
             end
             if (addr_i == ADDRESS_SPACE-7) begin
                 $display("Test completed");
