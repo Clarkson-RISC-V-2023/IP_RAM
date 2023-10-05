@@ -14,6 +14,8 @@ class gen_ram_seq extends uvm_sequence;
 
     rand int random_write_count;
     ram_packet_item item;          // write itme
+    constraint limit_random_writes  { soft random_write_count inside {[DEPTH/4:DEPTH]}; };
+    constraint limit_random_addr    { soft item.addr inside {[0:DEPTH-1]}; };
 
     virtual task body();
         `uvm_info("SEQUENCER", $sformatf("Creating %d 'w' ram_packets with word size of %d bits", DEPTH, DATA_WIDTH), UVM_LOW)
