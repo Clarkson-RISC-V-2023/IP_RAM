@@ -56,7 +56,7 @@ jobs:
     steps:
       - name: RAM_UVM_sanity_check
         shell: bash
-        runs: |
+        run: |
               cd IP_RAM
               make uvm_ram
   Upload_Sim_Artifact:
