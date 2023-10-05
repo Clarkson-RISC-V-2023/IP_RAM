@@ -3,7 +3,7 @@ import uvm_pkg::*;
 
 class verify_ram_test extends uvm_test;
     `uvm_component_utils(verify_ram_test)
-    function new(string name = "DEFAULT RAM tets", uvm_component parent=null);
+    function new(string name = "DEFAULT Read & Write RAM tets", uvm_component parent=null);
         super.new(name, parent);
     endfunction
 
