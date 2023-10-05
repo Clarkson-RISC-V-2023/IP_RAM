@@ -12,7 +12,7 @@ class ram_packet_item extends uvm_sequence_item;
     rand bit                                wr_en;
     bit      [DATA_WIDTH-1:0]               rdata;
 
-    constraint ram_item_addr { addr inside {[0:DEPTH]}; };
+    constraint ram_item_addr { addr inside {[0:ADDRESS_SPACE-1]}; };
 
     // Use macro to register class with factory
     `uvm_object_utils_begin(ram_packet_item)

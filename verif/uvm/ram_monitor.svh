@@ -28,8 +28,14 @@ class ram_monitor extends uvm_monitor;
             @ (posedge vif.clk);
             item.addr = vif.addr;
             item.wdata = vif.wdata;
-            item.rdata = vif.rdata;
             item.wr_en = vif.wr_en;
+
+            if (!item.wr_en)
+                @ (posedge vif.clk)
+                item.rdata = vif.rdata;
+
+            // Send packet to scoreboard to be analyzed
+            mon_analysis_port.write(item);
         end 
     endtask
 endclass

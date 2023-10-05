@@ -11,7 +11,7 @@ class ram_scoreboard extends uvm_scoreboard;
     endfunction
 
     int mem_space = DEPTH;
-    ram_packet_item refq[DEPTH];
+    ram_packet_item refq[ADDRESS_SPACE];
     uvm_analysis_imp #(ram_packet_item, ram_scoreboard) m_analysis_imp; // Monittor analysis
 
     virtual function void build_phase(uvm_phase phase);
@@ -24,10 +24,10 @@ class ram_scoreboard extends uvm_scoreboard;
             if(refq[item.addr] == null) begin 
                 refq[item.addr] =  new;
                 mem_space = mem_space - 1;
-                `uvm_info(get_type_name(), $sformatf("New value written. %d of %d left to be written", mem_space, DEPTH), UVM_LOW);
+                `uvm_info(get_type_name(), $sformatf("New value written. 0x%0h at 0x%0h %d of %d left to be written", item.wdata, item.addr, mem_space, DEPTH), UVM_LOW);
             end
             refq[item.addr] = item;
-            `uvm_info(get_type_name(), $sformatf("Wrote 0x%0h to addr 0x%0h", item.wdata, item.addr), UVM_LOW);
+            // `uvm_info(get_type_name(), $sformatf("Wrote 0x%0h to addr 0x%0h", item.wdata, item.addr), UVM_LOW);
         end
 
         if(!item.wr_en) begin
@@ -37,7 +37,7 @@ class ram_scoreboard extends uvm_scoreboard;
                 if (item.rdata != refq[item.addr].wdata)
                     `uvm_error(get_type_name(), $sformatf("Data missmatch, read addr 0x%0h and got 0x%h but 0x%h was expectedd...", item.addr, item.rdata, refq[item.addr].wdata))
                 else 
-                    `uvm_info(get_type_name(), $sformatf("PASS! read addr 0x%0h got 0x%0h and mattched the expected 0x%h0", item.addr, item.rdata, refq[item.addr].wdata), UVM_LOW)
+                    `uvm_info(get_type_name(), $sformatf("PASS! read addr 0x%0h got 0x%0h and mattched the expected 0x%h", item.addr, item.rdata, refq[item.addr].wdata), UVM_LOW)
         end
     endfunction
 endclass

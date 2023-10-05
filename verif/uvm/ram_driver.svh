@@ -20,10 +20,16 @@ class ram_driver extends uvm_driver #(ram_packet_item);
     virtual task run_phase(uvm_phase phase);
         super.run_phase(phase);
         forever begin
-            `uvm_info(get_type_name(), $sformatf("Waiting for sequencer..."), UVM_LOW)
             seq_item_port.get_next_item(item);
+
+            // Uncoment for debug
+            // if (item.wr_en)
+            //     `uvm_info(get_type_name(), $sformatf("Waiting 0x%0h @ 0x%0h...", item.wdata, item.addr), UVM_LOW)
+            // else
+            //     `uvm_info(get_type_name(), $sformatf("Reading @ 0x%0h...", item.addr), UVM_LOW)
             drive_item(item);
             seq_item_port.item_done();
+            // `uvm_info(get_type_name(), $sformatf("Waiting for sequencer..."), UVM_LOW)
         end
     endtask
 

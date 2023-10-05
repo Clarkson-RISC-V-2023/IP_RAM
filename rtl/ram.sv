@@ -24,7 +24,7 @@ module ram (
             ) mem_bank (
                 .clk(clk),
                 .wr_en_i(wr_en_i & mem_block_en_i[bank_num]),
-                .addr_i(bank_addr[bank_num][$clog2(ADDRESS_SPACE)-1:$clog2(NUM_OF_MEM_BLOCKS)]),
+                .addr_i((addr_i+bank_num_bin)>>2),
                 .wdata_i(wdata_i[bank_num*BANK_WIDTH+:BANK_WIDTH]),
                 .rdata_o(rdata_o[bank_num*BANK_WIDTH+:BANK_WIDTH])
             );
