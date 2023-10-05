@@ -23,7 +23,7 @@ module tb_uvm_ram;
     );
 
     initial begin
-        // $dumpvars;
+        $dumpvars;
         // $dumpfile("tb_uvm_ram.vcd");
 
         clk <= 0;
