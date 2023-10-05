@@ -7,5 +7,6 @@
 ./verif/uvm/ram_scoreboard.svh
 ./verif/uvm/ram_monitor.svh
 ./verif/uvm/ram_agent.svh
+./verif/uvm/ram_env.svh
 
 ./verif/tb_uvm_ram.sv
