@@ -58,7 +58,7 @@ jobs:
         shell: bash
         run: |
               cd IP_RAM
-              make uvm_ram
+              make uvm_ram OUT_DIR=./out/uvm_ram
   Upload_Sim_Artifact:
     runs-on: vivado-2023
     needs: [Build-SIM_memblock, Build-SIM_ROM, Build-SIM_RAM, Build-UVM-RAM]
