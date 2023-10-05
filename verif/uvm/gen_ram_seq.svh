@@ -11,15 +11,10 @@ class gen_ram_seq extends uvm_sequence;
         super.new(name);
     endfunction
 
-    int unsigned random_write_count = 500;
-    //rand int unsigned random_write_count;
-    ram_packet_item item;          // write itme
-    
-    // TODO constraint not working
-    //constraint limit_random_writes  { soft random_write_count inside {[100:1000]}; };
-    constraint limit_random_addr    { soft item.addr inside {[0:ADDRESS_SPACE-1]}; item.addr+1 % NUM_OF_MEM_BLOCKS == 0;};
-    // Random address must be within the mem range and sould go up in increments of 4
+    rand bit [31:0] random_write_count;
+    constraint limit_rando_writes { random_write_count inside {[100:DEPTH]}; };
 
+    ram_packet_item item;          // write itme
     
     virtual task body();
         `uvm_info("SEQUENCER", $sformatf("Creating %d 'w' ram_packets with word size of %d bits", DEPTH/NUM_OF_MEM_BLOCKS, DATA_WIDTH), UVM_LOW)
@@ -46,15 +41,12 @@ class gen_ram_seq extends uvm_sequence;
             item = ram_packet_item::type_id::create(seq_item_name);
 
             start_item(item);
-            item.randomize() with { mem_block_en == {NUM_OF_MEM_BLOCKS{1'b1}}; wr_en == 1'b1; };
+            item.randomize() with { addr[1:0] == 2'b00; mem_block_en == {NUM_OF_MEM_BLOCKS{1'b1}}; wr_en == 1'b1; };
             finish_item(item);
         end
-
+        
         // Read all address locations to verify data from initial write
         read_all_memory();
-
-        
-        
     endtask
 
     virtual task read_all_memory();
