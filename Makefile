@@ -18,6 +18,7 @@ build:
 	xsim $(XSIM_FLAGS)
 	rm -rf $(OUT_DIR)/*
 	mv xvlog* xelab* xsim** $(OUT_DIR)
+	mv *.log $(OUT_DIR) || true
 	mv *.wdb $(OUT_DIR) || true
 	mv *.vcd $(OUT_DIR) || true
 
