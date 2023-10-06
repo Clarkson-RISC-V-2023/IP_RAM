@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 module memblock #(
     parameter DEPTH = 256, 
     parameter DATA_WIDTH = 8,
@@ -7,8 +6,8 @@ module memblock #(
     input wire clk,
     input wire wr_en_i,
     input wire [$clog2(DEPTH)-1:0] addr_i,
-    input wire [DATA_WIDTH-1:0] wr_data_i,
-    output logic [DATA_WIDTH-1:0] rd_data_o
+    input wire [DATA_WIDTH-1:0] wdata_i,
+    output logic [DATA_WIDTH-1:0] rdata_o
 );
     reg [DATA_WIDTH-1:0] bmem [DEPTH-1:0];
 
@@ -23,10 +22,10 @@ module memblock #(
     
     always_ff @(posedge clk) begin
         if(wr_en_i) begin
-            bmem[addr_i] <= wr_data_i;
-            rd_data_o <= wr_data_i;
+            bmem[addr_i] <= wdata_i;
+            rdata_o <= wdata_i;
         end else begin
-            rd_data_o <= bmem[addr_i];
+            rdata_o <= bmem[addr_i];
         end
     end
 

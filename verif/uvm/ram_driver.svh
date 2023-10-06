@@ -1,0 +1,44 @@
+`include "uvm_macros.svh"
+import uvm_pkg::*;
+
+class ram_driver extends uvm_driver #(ram_packet_item);
+    `uvm_component_utils(ram_driver)
+
+    ram_packet_item item;
+    virtual ram_if vif;
+
+    function new (string name = "DEFAULT RAM driver", uvm_component parent=null);
+        super.new(name, parent);
+    endfunction
+
+    virtual function void build_phase (uvm_phase phase);
+        super.build_phase(phase);
+        if (!uvm_config_db#(virtual ram_if):: get(this, "", "ram_vif", vif))
+            `uvm_fatal(get_type_name(), "Could not get hold of vif...")
+    endfunction
+
+    virtual task run_phase(uvm_phase phase);
+        super.run_phase(phase);
+        forever begin
+            seq_item_port.get_next_item(item);
+
+            // Uncoment for debug
+            // if (item.wr_en)
+            //     `uvm_info(get_type_name(), $sformatf("Waiting 0x%0h @ 0x%0h...", item.wdata, item.addr), UVM_LOW)
+            // else
+            //     `uvm_info(get_type_name(), $sformatf("Reading @ 0x%0h...", item.addr), UVM_LOW)
+            drive_item(item);
+            seq_item_port.item_done();
+            // `uvm_info(get_type_name(), $sformatf("Waiting for sequencer..."), UVM_LOW)
+        end
+    endtask
+
+    virtual task drive_item(ram_packet_item item);
+        vif.addr = item.addr;
+        vif.wdata = item.wdata;
+        vif.mem_block_en = item.mem_block_en;
+        vif.wr_en = item.wr_en;
+        vif.rdata = item.rdata;
+        @ (posedge vif.clk);
+    endtask
+endclass

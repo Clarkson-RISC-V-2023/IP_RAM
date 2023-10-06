@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module rom #(
     parameter DEPTH = 256, 
     parameter DATA_WIDTH = 32,
@@ -17,7 +15,7 @@ module rom #(
         .clk(clk),
         .wr_en_i(1'b0), // Write enable is always low for ROM
         .addr_i(addr_i >> 2), // Right shift address by 2 to increment by 4
-        .wr_data_i({DEPTH{1'b0}}), // Write data is don't care for ROM
-        .rd_data_o(rom_o)
+        .wdata_i({DEPTH{1'b0}}), // Write data is don't care for ROM
+        .rdata_o(rom_o)
     );
 endmodule

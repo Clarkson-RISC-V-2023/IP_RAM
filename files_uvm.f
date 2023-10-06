@@ -1,0 +1,13 @@
+-f ./files.f
+
+./verif/uvm/ram_if.sv
+./verif/uvm/ram_packet_item.svh
+./verif/uvm/gen_ram_seq.svh
+./verif/uvm/ram_driver.svh
+./verif/uvm/ram_scoreboard.svh
+./verif/uvm/ram_monitor.svh
+./verif/uvm/ram_agent.svh
+./verif/uvm/ram_env.svh
+./verif/uvm/verify_ram_test.svh
+
+./verif/tb_uvm_ram.sv

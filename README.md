@@ -5,3 +5,10 @@ The RAM module instanciates the memory block and the default configuration will 
 
 ## To add as submodule use:
 `git submodule add -b main -f --name IP_RAM git@github.com:Clarkson-RISC-V-2023/IP_RAM.git /src/ip/mem`
+
+## Build commands
+    - `make all` This will build the memblock, ROM, RAM and UVM_RAM
+    - `make bmem` This will only build the memory block
+    - `make ram` This will only build the ROM block
+    - `make uvm_ram` This builds and runs the UVM tesbench for RAM
+    - `make clean` This removes all the output files from 
