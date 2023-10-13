@@ -28,7 +28,7 @@ module tb_rom #(
 
 
     initial begin
-        $readmemh(MEM_INIT_PATH, dut_rom.mem_inst.bmem);
+        $readmemh(MEM_INIT_PATH, dut_rom.mem_inst.bmem);   
         $dumpfile("rom_tb.vcd");
         $dumpvars(0, tb_rom);
         $display("ROM data loaded from %s", MEM_INIT_PATH);

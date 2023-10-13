@@ -20,13 +20,10 @@ module memblock #(
         end
     end
     
-    always_ff @(posedge clk) begin
-        if(wr_en_i) begin
+    always_ff @(negedge clk) begin
+        if(wr_en_i)
             bmem[addr_i] <= wdata_i;
-            rdata_o <= wdata_i;
-        end else begin
-            rdata_o <= bmem[addr_i];
-        end
     end
+    assign rdata_o = bmem[addr_i];
 
 endmodule
