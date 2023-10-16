@@ -1,4 +1,4 @@
-`define ROM_INIT_PATH ""
+`define ROM_INIT_PATH "./verif/init_mem/rom_tb_init.hex"
 
 module tb_rom #(
     parameter INSTR_WIDTH = 32,
