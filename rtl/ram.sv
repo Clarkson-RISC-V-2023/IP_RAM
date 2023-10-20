@@ -1,38 +1,40 @@
-//import ram_params::*;
+import ram_params::*;
  
-module ram #(
-    parameter  DATA_WIDTH = 32, // Must be multiple of 8 or BANK_WIDTH
-    parameter  DEPTH = 1024,
-    parameter  NUM_OF_MEM_BLOCKS = 4, // DATA_WIDTH/8 or DATA_WIDTH/BANK_WIDTH
-    parameter  ADDRESS_SPACE = 4096 // <= DEPTH * NUM_OF_MEM_BLOCKS
-)(
+module ram (
     input wire clk,
-    input wire [$clog2(ADDRESS_SPACE)-1:0]addr_i,
-    input wire [DATA_WIDTH-1:0] wdata_i,
-    input wire [NUM_OF_MEM_BLOCKS-1:0] mem_block_en_i, // Signal to specify which blocks are active
     input wire wr_en_i,
-
-    output reg [DATA_WIDTH-1:0] rdata_o
+    input wire [$clog2(DEPTH)-1:0] addr_i,
+    input wire [31:0] wdata_i,
+    input wire [3:0] mem_block_en_i, // 4-bit wide signal to enable writing to each memblock
+    output logic [31:0] rdata_o
 );
-    localparam BANK_WIDTH = 8; // Default 8 (1 byte)
 
-    reg [$clog2(ADDRESS_SPACE)-1:0] bank_addr [NUM_OF_MEM_BLOCKS-1:0];
+    wire [7:0] wdata_memblock[3:0];
+    wire [7:0] rdata_memblock[3:0];
 
+    // Splitting 32-bit data into 4 8-bit data to feed into each memblock
+    assign wdata_memblock[0] = wdata_i[7:0];
+    assign wdata_memblock[1] = wdata_i[15:8];
+    assign wdata_memblock[2] = wdata_i[23:16];
+    assign wdata_memblock[3] = wdata_i[31:24];
+
+    genvar i;
     generate
-        genvar bank_num;  
-        for (bank_num = 0; bank_num < NUM_OF_MEM_BLOCKS;bank_num=bank_num+1) begin : mem_block_loop
-            localparam [$clog2(NUM_OF_MEM_BLOCKS)-1:0] bank_num_bin = bank_num;
-            assign bank_addr[bank_num] = addr_i+bank_num_bin;
+        for (i=0; i<4; i=i+1) begin : memblock_gen
             memblock #(
                 .DEPTH(DEPTH),
-                .DATA_WIDTH(BANK_WIDTH)
-            ) mem_bank (
+                .DATA_WIDTH(8)
+            ) u_memblock (
                 .clk(clk),
-                .wr_en_i(wr_en_i & mem_block_en_i[bank_num]),
-                .addr_i(bank_addr[bank_num][$clog2(ADDRESS_SPACE)-1:$clog2(NUM_OF_MEM_BLOCKS)]),
-                .wdata_i(wdata_i[bank_num*BANK_WIDTH+:BANK_WIDTH]),
-                .rdata_o(rdata_o[bank_num*BANK_WIDTH+:BANK_WIDTH])
+                .wr_en_i(wr_en_i & mem_block_en_i[i]), // Enable write when mem_block_en_i bit is high
+                .addr_i(addr_i), // Directly assigning the incoming address
+                .wdata_i(wdata_memblock[i]),
+                .rdata_o(rdata_memblock[i])
             );
         end
     endgenerate
+
+    // Combining the 8-bit outputs from each memblock into a 32-bit output
+    assign rdata_o = {rdata_memblock[3], rdata_memblock[2], rdata_memblock[1], rdata_memblock[0]};
+
 endmodule
