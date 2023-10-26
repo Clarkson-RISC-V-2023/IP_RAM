@@ -24,7 +24,7 @@ module ram #(
             memblock #(
                 .DEPTH(DEPTH),
                 .DATA_WIDTH(BANK_WIDTH),
-                .MEM_INIT_PATH(RAM_INIT_PATH[i])
+                .MEM_INIT_PATH(RAM_INIT_PATH[bank_num])
             ) mem_bank (
                 .clk(clk),
                 .wr_en_i(wr_en_i & mem_block_en_i[bank_num]),
