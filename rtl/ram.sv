@@ -1,11 +1,9 @@
-//import ram_params::*;
+import ram_params::*;
  
 module ram #(
-    parameter  DATA_WIDTH = 32, // Must be multiple of 8 or BANK_WIDTH
-    parameter  DEPTH = 1024,
-    parameter  NUM_OF_MEM_BLOCKS = 4, // DATA_WIDTH/8 or DATA_WIDTH/BANK_WIDTH
-    parameter  ADDRESS_SPACE = 4096 // <= DEPTH * NUM_OF_MEM_BLOCKS
-)(
+    parameter string RAM_INIT_PATH[4] = {"", "", "", ""}
+)
+(
     input wire clk,
     input wire [$clog2(ADDRESS_SPACE)-1:0]addr_i,
     input wire [DATA_WIDTH-1:0] wdata_i,
@@ -25,7 +23,8 @@ module ram #(
             assign bank_addr[bank_num] = addr_i+bank_num_bin;
             memblock #(
                 .DEPTH(DEPTH),
-                .DATA_WIDTH(BANK_WIDTH)
+                .DATA_WIDTH(BANK_WIDTH),
+                .MEM_INIT_PATH(RAM_INIT_PATH[i])
             ) mem_bank (
                 .clk(clk),
                 .wr_en_i(wr_en_i & mem_block_en_i[bank_num]),
