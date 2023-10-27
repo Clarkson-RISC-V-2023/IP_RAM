@@ -42,5 +42,10 @@ uvm_ram:
 	# BUILDING UVM RAM:
 	make build IP=uvm_ram OUT_DIR=$(OUT_DIR)/uvm/ram  XVLOG_FLAGS="$(UVM_XVLOG_FLAGS)"
 
+program:
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	# Programming Board over Serial
+	python3 ./ROM_Programmer/rpp ./ROM_Programmer/tmp.txt -c COM3 -b 115200
+
 clean:
 	rm -rf xvlog* xelab* xsim* *.wdb *.log *.vcd out
