@@ -1,3 +1,4 @@
+`timescale 1ns/1ps  
 module memblock #(
     parameter DEPTH = 256, 
     parameter DATA_WIDTH = 8,
