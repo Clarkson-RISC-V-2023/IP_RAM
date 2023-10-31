@@ -16,6 +16,7 @@ module tb_rom #(
     wire [INSTR_WIDTH-1:0] instr;
     reg prog;
     reg serial;
+    reg programming_mode;
 
     rom #(
         .DATA_WIDTH(INSTR_WIDTH),
@@ -28,7 +29,8 @@ module tb_rom #(
 
         // New Programing Facilities
         .prog_i(prog),
-        .serial_i(serial)
+        .serial_i(serial),
+        .programming_mode(programming_mode)
     );
 
     always #20 clk= ~clk;
