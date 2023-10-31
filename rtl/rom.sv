@@ -12,7 +12,10 @@ module rom #(
 
     // Programming Inputs
     input wire prog_i,
-    input wire serial_i
+    input wire serial_i,
+
+    // Programming Outputs
+    output reg programming_mode
 );
     // Internal UART Signal
     wire data_valid;
@@ -61,6 +64,7 @@ module rom #(
         internal_address <= '0;
         prog_addr <= '0;
         prog_reg <= prog_i;
+        programming_mode <= '0;
     end
 
     // Enabling Programming
@@ -69,10 +73,12 @@ module rom #(
             internal_we <= prog_we;
             internal_write_data <= prog_write_data;
             internal_address <= prog_addr;
+            programming_mode <= '1;
         end else begin
             internal_we <= '0;
             internal_write_data <= '0;
             internal_address <= addr_i >> 2;
+            programming_mode <= '0;
         end
     end
 
