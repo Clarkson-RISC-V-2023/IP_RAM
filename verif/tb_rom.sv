@@ -4,7 +4,7 @@ module tb_rom #(
     parameter INSTR_WIDTH = 32,
     parameter INSTR_COUNT = 10,
     parameter string MEM_INIT_PATH = `ROM_INIT_PATH,
-    parameter BUAD_FACTOR = 217
+    parameter BAUD_FACTOR = 217
 )(
     // EMPTY 
 );
@@ -21,7 +21,7 @@ module tb_rom #(
     rom #(
         .DATA_WIDTH(INSTR_WIDTH),
         .DEPTH(DEPTH),
-        .BUAD_FACTOR(BUAD_FACTOR)
+        .BAUD_FACTOR(BAUD_FACTOR)
     ) dut_rom (
         .clk(clk),
         .addr_i(addr),
