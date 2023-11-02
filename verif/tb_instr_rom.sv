@@ -21,7 +21,7 @@ module tb_instr_rom #(
         .DATA_WIDTH(INSTR_WIDTH),
         .DEPTH(DEPTH),
         .BAUD_FACTOR(BAUD_FACTOR)
-    ) dut_rom (
+    ) dut_instr_rom (
         .clk(clk),
         .addr_i(addr),
         .rom_o(instr),
@@ -64,12 +64,18 @@ module tb_instr_rom #(
 
     initial begin
         // $readmemh(MEM_INIT_PATH, dut_rom.mem_inst.bmem);   
-        $dumpfile("rom_tb.vcd");
+        $dumpfile("tb_instr_rom.vcd");
         $dumpvars(0, tb_instr_rom);
         // $display("ROM data loaded from %s", MEM_INIT_PATH);
         clk = 1'b0;
         serial = '1;
         prog = '0;
+        addr = '0;
+
+        // Reading Initial  Data
+        #1000 addr = addr + 3'b100;
+        #1000 addr = addr + 3'b100;
+        #1000 addr = addr + 3'b100;
         addr = '0;
 
         #100
