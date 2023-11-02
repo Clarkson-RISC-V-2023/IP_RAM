@@ -1,4 +1,4 @@
-.PHONY: all bmem rom ram uvm_ram
+.PHONY: all bmem rom instr_rom ram uvm_ram
 
 IP 				= ram
 FILE_LIST 		= ./files.f
@@ -9,7 +9,7 @@ XELAB_FLAGS 	= -top tb_$(IP)
 XSIM_FLAGS 		= -R tb_$(IP)
 OUT_DIR 		= ./out
 
-all: clean bmem rom ram uvm_ram 
+all: clean bmem rom instr_rom ram uvm_ram 
 
 build: 
 	mkdir -p $(OUT_DIR)
@@ -32,6 +32,11 @@ rom:
 	# BUILDING tb ROM:
 	make build IP=rom OUT_DIR=$(OUT_DIR)/tb/rom
 
+instr_rom:
+	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	# BUILDING tb Instruction ROM:
+	make build IP=instr_rom OUT_DIR=$(OUT_DIR)/tb/instr_rom
+
 ram:
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	# BUILDING tb RAM:
@@ -45,7 +50,7 @@ uvm_ram:
 program:
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	# Programming Board over Serial
-	python3 ./ROM_Programmer/rpp ./ROM_Programmer/tmp.txt -c COM3 -b 115200
+	python3 ./ROM_Programmer/rpp.py ./ROM_Programmer/tmp.txt -c COM3 -b 115200
 
 clean:
 	rm -rf xvlog* xelab* xsim* *.wdb *.log *.vcd out
