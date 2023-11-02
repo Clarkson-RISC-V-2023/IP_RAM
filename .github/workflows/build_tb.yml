@@ -41,6 +41,15 @@ jobs:
         run:  |
               cd IP_RAM 
               make rom OUT_DIR=./out/rom
+  Build-SIM_INSTR_ROM:
+    runs-on: vivado-2023
+    needs: Clone_Repo
+    steps:
+      - name: ROM_sanity_check
+        shell: bash
+        run:  |
+              cd IP_RAM 
+              make instr_rom OUT_DIR=./out/instr_rom
   Build-SIM_RAM:
     runs-on: vivado-2023
     needs: Clone_Repo
