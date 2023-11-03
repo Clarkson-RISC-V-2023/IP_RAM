@@ -67,19 +67,10 @@ module instr_rom #(
     end
 
     // Enabling Programming
-    always @(prog_i, addr_i, prog_we, prog_write_data, prog_addr) begin
-        if(prog_i == 1'b1) begin
-            internal_we <= prog_we;
-            internal_write_data <= prog_write_data;
-            internal_address <= prog_addr;
-            programming_mode <= '1;
-        end else begin
-            internal_we <= '0;
-            internal_write_data <= '0;
-            internal_address <= addr_i >> 2;
-            programming_mode <= '0;
-        end
-    end
+    assign internal_we          = prog_i ? prog_we          : 'b0;
+    assign internal_write_data  = prog_i ? prog_write_data  : 'b0;
+    assign internal_address     = prog_i ? prog_addr        : addr_i >> 2;
+    assign programming_mode     = prog_i;
 
     // Enabling Writing through UART
     always @(posedge clk) begin
