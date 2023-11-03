@@ -57,13 +57,9 @@ module instr_rom #(
 
     // Initializing Signals
     initial begin
-        internal_we <= '0;
-        internal_write_data <= '0;
         num_bytes_written <= '0;
-        internal_address <= '0;
         prog_addr <= '0;
         prog_reg <= prog_i;
-        programming_mode <= '0;
     end
 
     // Enabling Programming
