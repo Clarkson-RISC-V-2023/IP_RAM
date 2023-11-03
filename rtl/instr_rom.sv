@@ -25,7 +25,12 @@ module instr_rom #(
     reg [DATA_WIDTH-1:0] prog_write_data;
     reg prog_reg;
 
-     // internal_address = addr_i >> 2
+        // Internal Memblock Signals
+    reg [$clog2(DEPTH)-1:0] internal_address;
+    reg internal_we;
+    reg [DATA_WIDTH-1:0] internal_write_data;
+    reg [$clog2(DEPTH)-1:0] num_bytes_written;
+
     // Initializing Signals
     initial begin
         num_bytes_written <= '0;
@@ -33,6 +38,7 @@ module instr_rom #(
         prog_reg <= '0;
     end
 
+    // internal_address = addr_i >> 2
     // Enabling Programming
     assign internal_we          = prog_i ? prog_we          : 'b0;
     assign internal_write_data  = prog_i ? prog_write_data  : 'b0;
@@ -49,12 +55,6 @@ module instr_rom #(
         .o_RX_DV(data_valid),
         .o_RX_Byte(byte_recieved)
     );
-
-    // Internal Memblock Signals
-    reg [$clog2(DEPTH)-1:0] internal_address;
-    reg internal_we;
-    reg [DATA_WIDTH-1:0] internal_write_data;
-    reg [$clog2(DEPTH)-1:0] num_bytes_written;
 
     // Memblock Storage
     memblock #(
