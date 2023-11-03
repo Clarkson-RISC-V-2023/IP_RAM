@@ -70,7 +70,7 @@ jobs:
               make uvm_ram OUT_DIR=./out/uvm_ram
   Upload_Sim_Artifact:
     runs-on: vivado-2023
-    needs: [Build-SIM_memblock, Build-SIM_ROM, Build-SIM_RAM, Build-UVM-RAM]
+    needs: [Build-SIM_memblock, Build-SIM_ROM, Build-SIM_RAM, Build-UVM-RAM, Build-SIM_INSTR_ROM]
     steps:
       - name: Upload Artifact 
         uses: actions/upload-artifact@v2
