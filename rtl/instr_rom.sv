@@ -6,6 +6,7 @@ module instr_rom #(
     parameter NUM_BYTES = 4
     )(
     input wire clk,
+    input wire rst_n,
     input wire [$clog2(DEPTH)-1:0] addr_i,
     output logic [DATA_WIDTH-1:0] rom_o,
 
@@ -14,7 +15,7 @@ module instr_rom #(
     input wire serial_i,
 
     // Programming Outputs
-    output reg programming_mode
+    output logic programming_mode
 );
     // Internal UART Signal
     wire data_valid;
@@ -24,14 +25,29 @@ module instr_rom #(
     reg [DATA_WIDTH-1:0] prog_write_data;
     reg prog_reg;
 
+     // internal_address = addr_i >> 2
+    // Initializing Signals
+    initial begin
+        num_bytes_written <= '0;
+        prog_addr <= '0;
+        prog_reg <= '0;
+    end
+
+    // Enabling Programming
+    assign internal_we          = prog_i ? prog_we          : 'b0;
+    assign internal_write_data  = prog_i ? prog_write_data  : 'b0;
+    assign internal_address     = prog_i ? prog_addr        : addr_i >> 2;
+    assign programming_mode     = prog_reg;
+
     // UART Receiver
     uart_rx #(
         .CLKS_PER_BIT(BAUD_FACTOR)
     ) uart_inst (
+        .i_Rst_L(rst_n),
         .i_Clock(clk),
-        .i_Rx_Serial(serial_i),
-        .o_Rx_DV(data_valid),
-        .o_Rx_Byte(byte_recieved)
+        .i_RX_Serial(serial_i),
+        .o_RX_DV(data_valid),
+        .o_RX_Byte(byte_recieved)
     );
 
     // Internal Memblock Signals
@@ -52,21 +68,6 @@ module instr_rom #(
         .wdata_i(internal_write_data), // Write data is don't care for ROM
         .rdata_o(rom_o)
     );
-
-    // internal_address = addr_i >> 2
-
-    // Initializing Signals
-    initial begin
-        num_bytes_written <= '0;
-        prog_addr <= '0;
-        prog_reg <= prog_i;
-    end
-
-    // Enabling Programming
-    assign internal_we          = prog_i ? prog_we          : 'b0;
-    assign internal_write_data  = prog_i ? prog_write_data  : 'b0;
-    assign internal_address     = prog_i ? prog_addr        : addr_i >> 2;
-    assign programming_mode     = prog_i;
 
     // Enabling Writing through UART
     always @(posedge clk) begin
