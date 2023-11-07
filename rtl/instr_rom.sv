@@ -49,7 +49,7 @@ module instr_rom #(
     uart_rx #(
         .CLKS_PER_BIT(BAUD_FACTOR)
     ) uart_inst (
-        .i_Rst_L(rst_n),
+        .i_Rst_L(prog_i),
         .i_Clock(clk),
         .i_RX_Serial(serial_i),
         .o_RX_DV(data_valid),
