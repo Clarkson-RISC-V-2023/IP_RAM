@@ -26,11 +26,13 @@ with open(arguments.filename, "r") as f:
     instructions = f.readlines()
 
 # Setting Up COM Port
-# ser = serial.Serial(com_port, baud_rate)
+ser = serial.Serial(com_port, baud_rate)
 
+bytes = []
 for instruction in instructions:
-    for i in range(3,-1,-1):
+    for i in range(3, -1, -1):
         mask = 0x000000FF << (i * 8)
-        value = hex((mask & int(instruction,2)) >> (i * 8))
-        # ser.write(value)
-        print(value)
+        value = (mask & int(instruction, 2)) >> (i * 8)
+        bytes = bytes + [value]
+ser.write(bytearray(bytes))
+print("Programming Complete.")
