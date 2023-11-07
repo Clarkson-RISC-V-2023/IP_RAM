@@ -11,11 +11,12 @@ module memblock #(
 );
     reg [DATA_WIDTH-1:0] bmem [DEPTH-1:0];
 
-    integer i;
+  
     initial begin
         if(MEM_INIT_PATH != "") begin
             $readmemb(MEM_INIT_PATH, bmem);
         end else begin
+            integer i;
             for(i = 0;i < DEPTH;i = i + 1) bmem[i] = '0;
         end
     end

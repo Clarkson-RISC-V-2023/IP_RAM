@@ -16,20 +16,23 @@ module ram #(
 );
     localparam BANK_WIDTH = 8; // Default 8 (1 byte)
 
-    reg [$clog2(ADDRESS_SPACE)-1:0] bank_addr [NUM_OF_MEM_BLOCKS-1:0];
+    reg [$clog2(DEPTH)-1:0] bank_addr [NUM_OF_MEM_BLOCKS-1:0];
 
     generate
         genvar bank_num;  
         for (bank_num = 0; bank_num < NUM_OF_MEM_BLOCKS;bank_num=bank_num+1) begin : mem_block_loop
-            localparam [$clog2(NUM_OF_MEM_BLOCKS)-1:0] bank_num_bin = bank_num;
-            assign bank_addr[bank_num] = addr_i+bank_num_bin;
+            localparam [$clog2(NUM_OF_MEM_BLOCKS)-1:0] bank_num_bin = bank_num+1;
+            localparam [$clog2(NUM_OF_MEM_BLOCKS)-1:0] num_of_bmem_bin = NUM_OF_MEM_BLOCKS;
+            localparam [$clog2(NUM_OF_MEM_BLOCKS)-1:0] addr_i_offset = num_of_bmem_bin-bank_num_bin;
+
+            assign bank_addr[bank_num] = (addr_i+addr_i_offset)>>$clog2(NUM_OF_MEM_BLOCKS);
             memblock #(
                 .DEPTH(DEPTH),
                 .DATA_WIDTH(BANK_WIDTH)
             ) mem_bank (
                 .clk(clk),
                 .wr_en_i(wr_en_i & mem_block_en_i[bank_num]),
-                .addr_i(bank_addr[bank_num][$clog2(ADDRESS_SPACE)-1:$clog2(NUM_OF_MEM_BLOCKS)]),
+                .addr_i(bank_addr[bank_num]),
                 .wdata_i(wdata_i[bank_num*BANK_WIDTH+:BANK_WIDTH]),
                 .rdata_o(rdata_o[bank_num*BANK_WIDTH+:BANK_WIDTH])
             );
