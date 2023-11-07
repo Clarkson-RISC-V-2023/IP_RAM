@@ -28,11 +28,10 @@ with open(arguments.filename, "r") as f:
 # Setting Up COM Port
 ser = serial.Serial(com_port, baud_rate)
 
-bytes = []
 for instruction in instructions:
     for i in range(3, -1, -1):
         mask = 0x000000FF << (i * 8)
         value = (mask & int(instruction, 2)) >> (i * 8)
-        bytes = bytes + [value]
-ser.write(bytearray(bytes))
+        ser.write(bytearray([value]))
+
 print("Programming Complete.")
