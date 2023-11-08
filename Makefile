@@ -7,21 +7,21 @@ XVLOG_FLAGS 	= -sv -f $(FILE_LIST)
 UVM_XVLOG_FLAGS	= -sv -L uvm -f $(UVM_FILE_LIST)
 XELAB_FLAGS 	= -top tb_$(IP)
 XSIM_FLAGS 		= -R tb_$(IP)
-OUT_DIR 		= ./out
+CHECK_UVM_ERROR = false
+OUT_DIR			= out
 
 all: clean bmem rom instr_rom ram uvm_ram 
 
 build: 
+	rm -rf $(OUT_DIR)/*
 	mkdir -p $(OUT_DIR)
 	xvlog $(XVLOG_FLAGS) 
 	xelab $(XELAB_FLAGS)
 	xsim $(XSIM_FLAGS)
-	rm -rf $(OUT_DIR)/*
 	mv xvlog* xelab* xsim** $(OUT_DIR)
 	mv *.log $(OUT_DIR) || true
 	mv *.wdb $(OUT_DIR) || true
 	mv *.vcd $(OUT_DIR) || true
-
 bmem:
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	# BUILDING tb BMEM:
@@ -45,7 +45,22 @@ ram:
 uvm_ram:
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	# BUILDING UVM RAM:
+
+	CHECK_UVM_ERROR=true
 	make build IP=uvm_ram OUT_DIR=$(OUT_DIR)/uvm/ram  XVLOG_FLAGS="$(UVM_XVLOG_FLAGS)"
+	make uvm_ram_check_errors OUT_DIR=$(OUT_DIR)/uvm/ram
+
+uvm_ram_check_errors:
+	if [ "$(CHECK_UVM_ERROR)" = "true" ]; then \
+		if ! grep -q "UVM_ERROR :    0" ./$(OUT_DIR)/xsim.log; then \
+			echo "UVM reported errors!"; \
+			exit 1; \
+		fi; \
+		if ! grep -q "UVM_FATAL :    0" ./$(OUT_DIR)/xsim.log; then \
+			echo "UVM reported fatal errors!"; \
+			exit 2; \
+		fi; \
+	fi
 
 program:
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

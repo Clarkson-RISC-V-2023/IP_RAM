@@ -25,13 +25,12 @@ class ram_monitor extends uvm_monitor;
         
         forever begin
             ram_packet_item item = new;
-            @ (posedge vif.clk);
+            @ (negedge vif.clk);
             item.addr = vif.addr;
             item.wdata = vif.wdata;
             item.wr_en = vif.wr_en;
 
             if (!item.wr_en)
-                @ (posedge vif.clk)
                 item.rdata = vif.rdata;
 
             // Send packet to scoreboard to be analyzed

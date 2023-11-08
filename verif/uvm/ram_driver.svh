@@ -39,6 +39,6 @@ class ram_driver extends uvm_driver #(ram_packet_item);
         vif.mem_block_en = item.mem_block_en;
         vif.wr_en = item.wr_en;
         vif.rdata = item.rdata;
-        @ (posedge vif.clk);
+        @ (negedge vif.clk);
     endtask
 endclass
